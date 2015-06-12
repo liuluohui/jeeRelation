@@ -2,6 +2,7 @@ package com.jee.web.controller;
 
 import com.jee.web.api.entity.AuthInfo;
 import com.jee.web.api.entity.AuthResult;
+import com.jee.web.context.FackCache;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,10 @@ public class AuthController {
         AuthResult result = new AuthResult();
         result.setAppId(authInfo.getAppId());
         result.setToken(UUID.randomUUID().toString());
+
+        //put token to cache
+        FackCache.addToken(result.getAppId(), result.getToken());
+
         return result;
     }
 
