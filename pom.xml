@@ -13,6 +13,7 @@
         <module>springmvcrestful</module>
         <module>security-rsa</module>
         <module>esapi</module>
+        <module>spring-rabbit</module>
     </modules>
 
     <properties>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-4.1.xsd
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
+
+    <!-- 连接服务配置  -->
+    <bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory"
+          p:username="admin" p:password="admin" p:port="5672">
+        <constructor-arg value="127.0.0.1"/>
+    </bean>
+
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+
+    <rabbit:queue id="publish_queue_A" durable="true" auto-delete="false" exclusive="false" name="publish_queue_A"/>
+    <rabbit:queue id="publish_queue_B" durable="true" auto-delete="false" exclusive="false" name="publish_queue_B"/>
+    <rabbit:queue id="publish_queue_C" durable="true" auto-delete="false" exclusive="false" name="publish_queue_C"/>
+
+    <!-- fanout-exchange，作为发布-订阅模式使用。
+        由于RabbitMQ的发布订阅模型是根据多个queue，多个消费者订阅实现的。此处声明的exchange不必预先绑定queue，
+        在消费者声明queue并绑定到该exchange即可。
+     -->
+    <rabbit:fanout-exchange name="fanoutExchange" durable="true" auto-delete="false" id="fanoutExchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="publish_queue_A"></rabbit:binding>
+            <rabbit:binding queue="publish_queue_B"></rabbit:binding>
+            <rabbit:binding queue="publish_queue_C"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+
+
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+        <rabbit:listener queues="publish_queue_A" ref="subscribeA"/>
+    </rabbit:listener-container>
+
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+        <rabbit:listener queues="publish_queue_B" ref="subscribeB"/>
+    </rabbit:listener-container>
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+        <rabbit:listener queues="publish_queue_C" ref="subscribeC"/>
+    </rabbit:listener-container>
+
+    <bean id="subscribeA" class="com.uap.web.rabbit.pub.consumer.SubscribeA"/>
+    <bean id="subscribeB" class="com.uap.web.rabbit.pub.consumer.SubscribeB"/>
+    <bean id="subscribeC" class="com.uap.web.rabbit.pub.consumer.SubscribeC"/>
+</beans>

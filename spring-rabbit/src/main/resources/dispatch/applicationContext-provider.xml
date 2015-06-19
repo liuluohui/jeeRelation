@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+            http://www.springframework.org/schema/rabbit
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
+
+
+    <!-- connectionFactory -->
+    <rabbit:connection-factory id="connectionFactory" addresses="127.0.0.1:5672" username="admin"
+                               password="admin" cache-mode="CHANNEL"
+                               requested-heartbeat="5000"></rabbit:connection-factory>
+
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <!-- queue 队列声明-->
+    <rabbit:queue id="hello" durable="true" auto-delete="false" exclusive="false" name="hello"/>
+
+    <rabbit:direct-exchange name="hellowExchange" durable="true" auto-delete="false" id="hellowExchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="hello" key="hello"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+
+    <!-- spring template声明-->
+    <rabbit:template id="amqpTemplate" exchange="hellowExchange" connection-factory="connectionFactory"
+                     retry-template="retryConnTemplate">
+    </rabbit:template>
+
+    <!-- 增加失败重试机制，发送失败之后，会尝试重发，重发间隔(ms)为
+	    第一次 initialInterval
+	    此后：initialInterval*multiplier > maxInterval ? maxInterval : initialInterval*multiplier。
+	    配合集群使用的时候，当mq集群中一个down掉之后，重试机制尝试其他可用的mq。
+	 -->
+    <bean id="retryConnTemplate" class="org.springframework.retry.support.RetryTemplate">
+        <property name="backOffPolicy">
+            <bean class="org.springframework.retry.backoff.ExponentialBackOffPolicy">
+                <property name="initialInterval" value="500"/>
+                <property name="multiplier" value="10.0"/>
+                <property name="maxInterval" value="10000"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="helloProvider" class="com.uap.web.rabbit.helloworld.provider.HelloworldProvider"/>
+
+</beans>
