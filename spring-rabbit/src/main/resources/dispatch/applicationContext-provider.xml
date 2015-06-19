@@ -31,7 +31,7 @@
                      retry-template="retryConnTemplate">
     </rabbit:template>
 
-    <!-- 增加失败重试机制，发送失败之后，会尝试重发，重发间隔(ms)为
+    <!-- 增加失败重试机制，发送失败之后，会尝试重发三次，重发间隔(ms)为
 	    第一次 initialInterval
 	    此后：initialInterval*multiplier > maxInterval ? maxInterval : initialInterval*multiplier。
 	    配合集群使用的时候，当mq集群中一个down掉之后，重试机制尝试其他可用的mq。
