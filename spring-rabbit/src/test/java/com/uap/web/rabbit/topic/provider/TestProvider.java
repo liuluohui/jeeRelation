@@ -24,6 +24,8 @@ public class TestProvider extends AbstractJUnit4SpringContextTests {
         provider.sendMsg("lazy.brown.fox", "patten is  lazy.brown.fox ");
         provider.sendMsg("lazy.pink.rabbit", "patten is  lazy.pink.rabbit ");
         provider.sendMsg("quick.brown.fox", "patten is quick.brown.fox ");
+        provider.sendMsg("quick.brown.fox", "patten is quick.brown.fox ");
+        provider.sendMsg("lazy", "patten is lazy");
     }
 
 }

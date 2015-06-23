@@ -24,4 +24,11 @@ public class TestProvider extends AbstractJUnit4SpringContextTests {
         }
     }
 
+    @Test
+    public void testPreferchAck() {
+        for (int i = 0; i < 10; i++) {
+            provider.sayHello("Hello" + new Date());
+        }
+    }
+
 }
