@@ -44,7 +44,7 @@
     </bean>
 
     <!-- Spring Data Jpa配置 -->
-    <jpa:repositories base-package="com.jee.shiro" transaction-manager-ref="transactionManager"
+    <jpa:repositories base-package="com.jee.shiro.repository" transaction-manager-ref="transactionManager"
                       entity-manager-factory-ref="entityManagerFactory"/>
 
     <!-- Jpa 事务配置 -->
@@ -59,28 +59,27 @@
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
     <!-- production环境 -->
-    <beans profile="production">
-        <context:property-placeholder ignore-unresolvable="true"
-                                      location="classpath*:/application.properties"/>
+    <context:property-placeholder ignore-unresolvable="true"
+                                  location="classpath*:/application.properties"/>
 
-        <!-- 数据源配置, 使用Tomcat JDBC连接池 -->
-        <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
-            <!-- Connection Info -->
-            <property name="driverClassName" value="${jdbc.driver}"/>
-            <property name="url" value="${jdbc.url}"/>
-            <property name="username" value="${jdbc.username}"/>
-            <property name="password" value="${jdbc.password}"/>
+    <!-- 数据源配置, 使用Tomcat JDBC连接池 -->
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
 
-            <!-- Connection Pooling Info -->
-            <property name="maxActive" value="${jdbc.pool.maxActive}"/>
-            <property name="maxIdle" value="${jdbc.pool.maxIdle}"/>
-            <property name="minIdle" value="0"/>
-            <property name="defaultAutoCommit" value="false"/>
-        </bean>
+        <!-- Connection Pooling Info -->
+        <property name="maxActive" value="${jdbc.pool.maxActive}"/>
+        <property name="maxIdle" value="${jdbc.pool.maxIdle}"/>
+        <property name="minIdle" value="0"/>
+        <property name="defaultAutoCommit" value="false"/>
+    </bean>
 
-        <!-- 数据源配置,使用应用服务器的数据库连接池 -->
-        <!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
-    </beans>
+    <!-- 数据源配置,使用应用服务器的数据库连接池 -->
+    <!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
+
 
     <!--&lt;!&ndash; local development环境 &ndash;&gt;-->
     <!--<beans profile="development">-->

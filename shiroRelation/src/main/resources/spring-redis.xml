@@ -30,32 +30,28 @@
     </bean>
 
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:hostName="${redis.host}" p:port="${redis.port}" p:password="${redis.password}"
+          p:hostName="${redis.host}" p:port="${redis.port}"
           p:poolConfig-ref="poolConfig"/>
-
-    <bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-        <property name="connectionFactory" ref="connectionFactory"/>
-    </bean>
 
     <bean class="org.springframework.data.redis.core.RedisTemplate" id="redisTemplate">
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
 
 
-    <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
-        <constructor-arg index="0" ref="poolConfig"/>
-        <constructor-arg index="1">
-            <list>
-                <bean class="redis.clients.jedis.JedisShardInfo">
-                    <constructor-arg index="0" value="${redis1.ip}"/>
-                    <constructor-arg index="1" value="${redis.port}" type="int"/>
-                </bean>
-                <bean class="redis.clients.jedis.JedisShardInfo">
-                    <constructor-arg index="0" value="${redis2.ip}"/>
-                    <constructor-arg index="1" value="${redis.port}" type="int"/>
-                </bean>
-            </list>
-        </constructor-arg>
-    </bean>
+    <!--<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">-->
+    <!--<constructor-arg index="0" ref="poolConfig"/>-->
+    <!--<constructor-arg index="1">-->
+    <!--<list>-->
+    <!--<bean class="redis.clients.jedis.JedisShardInfo">-->
+    <!--<constructor-arg index="0" value="${redis1.ip}"/>-->
+    <!--<constructor-arg index="1" value="${redis.port}" type="int"/>-->
+    <!--</bean>-->
+    <!--<bean class="redis.clients.jedis.JedisShardInfo">-->
+    <!--<constructor-arg index="0" value="${redis2.ip}"/>-->
+    <!--<constructor-arg index="1" value="${redis.port}" type="int"/>-->
+    <!--</bean>-->
+    <!--</list>-->
+    <!--</constructor-arg>-->
+    <!--</bean>-->
 
 </beans>
