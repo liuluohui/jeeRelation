@@ -19,40 +19,41 @@ public class JmsTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void testSendMsg() {
-        String hello = "hello. " + new Date();
+        byte[] data =createData(1);
         while (true) {
-            provider.sendDataToCrQueue(hello);
+            provider.sendDataToCrQueue(data);
+        }
+
+    }
+
+
+    @Test
+    public void testSendMsg1K() {
+        byte[] data = createData(1024);
+        while (true) {
+            provider.sendDataToCrQueue(data);
         }
 
     }
 
     @Test
-    public void testSendTopicMsg() {
-        final byte[] data = new byte[1024];
-        for (int j = 0; j < data.length; j++) {
-            data[j] = (byte) j;
-        }
-        for (int i = 0; i < 5; i++) {
-            new Thread() {
-                public void run() {
-
-                    while (true) {
-                        provider.sendPublic(data);
-                    }
-                }
-            }.start();
-        }
-
-        Object obj = new Object();
-        synchronized (obj) {
-            try {
-                obj.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    public void testSendMsg256K() {
+        byte[] data = createData(1024*256);
+        while (true) {
+            provider.sendDataToCrQueue(data);
         }
 
     }
+
+    @Test
+    public void testSendMsg10K() {
+        byte[] data = createData(10240);
+        while (true) {
+            provider.sendDataToCrQueue(data);
+        }
+
+    }
+
 
     @Test
     public void testConsume() {
@@ -67,5 +68,12 @@ public class JmsTest extends AbstractJUnit4SpringContextTests {
 
     }
 
+    private byte[] createData(int size) {
+        byte[] data = new byte[size];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = (byte) i;
+        }
+        return data;
+    }
 
 }

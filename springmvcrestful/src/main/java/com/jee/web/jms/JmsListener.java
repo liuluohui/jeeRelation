@@ -12,6 +12,6 @@ import org.springframework.stereotype.Service;
 public class JmsListener implements MessageListener {
 
     public void onMessage(Message message) {
-        System.out.println(" data :" + new String(message.getBody()));
+        System.out.println("receive data size:" + message.getBody().length);
     }
 }

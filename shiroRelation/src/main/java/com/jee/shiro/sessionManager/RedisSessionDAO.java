@@ -1,23 +1,25 @@
-package com.jee.shiro.sessionDAO;
+package com.jee.shiro.sessionManager;
 
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.SessionException;
 import org.apache.shiro.session.UnknownSessionException;
+import org.apache.shiro.session.mgt.SessionContext;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * 整合分布式部署的session
- * 使用redis作为缓存
+ * Created by Administrator on 2015/7/9.
  */
-@Component("redisSessionDAO")
 public class RedisSessionDAO extends AbstractSessionDAO {
 
-//
-//    @Autowired
-//    private StringRedisTemplate redisTemplate;
+    @Autowired
+    private RedisTemplate<Serializable,Serializable> redisTemplate;
 
     @Override
     protected Serializable doCreate(Session session) {

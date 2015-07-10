@@ -47,16 +47,16 @@
 
 
     <!-- queue litener  观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象-->
-    <rabbit:listener-container connection-factory="rabbitConnectionFactorySlaveConsumer" acknowledge="auto">
-        <rabbit:listener queues="queue_one" ref="queueOneListener"/>
-    </rabbit:listener-container>
+    <!--<rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto" prefetch="1000" concurrency="5" max-concurrency="10">-->
+        <!--<rabbit:listener queues="queue_one" ref="queueOneListener"/>-->
+    <!--</rabbit:listener-container>-->
 
 
     <!-- 广播接收着 -->
-    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto" concurrency="5" max-concurrency="10">
         <rabbit:listener queues="public_queue" ref="clusterConsumerA"/>
     </rabbit:listener-container>
-    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto" concurrency="5" max-concurrency="10">
         <rabbit:listener queues="public_queue2" ref="clusterConsumerB"/>
     </rabbit:listener-container>
 </beans>
