@@ -33,8 +33,8 @@
 		</c:forEach>
 		</tbody>
 	</table>
-	
-	<tags:pagination page="${tasks}" paginationSize="5"/>
+
+	<%--<tags:pagination page="${tasks}" paginationSize="5"/>--%>
 
 	<div><a class="btn" href="${ctx}/task/create">创建任务</a></div>
 </body>

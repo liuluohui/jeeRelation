@@ -80,20 +80,27 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
     @Override
     protected Serializable doCreate(Session session) {
+
+        logger.info("create session");
         Serializable sessionId = this.generateSessionId(session);
         this.assignSessionId(session, sessionId);
         this.saveSession(session);
+        logger.info("create session id is ", sessionId);
         return sessionId;
     }
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
+
+        logger.info("do read session by id ", sessionId);
+
         if (sessionId == null) {
             logger.error("session id is null");
             return null;
         }
 
         Session s = (Session) redisTemplate.boundHashOps(keyPrefix).get(sessionId);
+        logger.info("read session is ", s);
         return s;
     }
 

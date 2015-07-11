@@ -25,7 +25,7 @@ public class TestShare extends AbstractJUnit4SpringContextTests {
 //        sessionDAO.create(new SimpleSession());
 //        redisTemplate.boundValueOps("a").set("v");
         System.out.println(redisTemplate.boundValueOps("a").get());
-        System.out.println(redisTemplate.boundHashOps("shiro_redis_session").get("de670761-8702-4531-be10-f082b203d274"));
+        System.out.println(sessionDAO.getActiveSessions());
     }
 
 
