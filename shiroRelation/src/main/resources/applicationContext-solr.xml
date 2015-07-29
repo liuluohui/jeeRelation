@@ -11,11 +11,11 @@
     <context:component-scan base-package="com.jee.solr">
     </context:component-scan>
 
-    <solr:solr-server id="solrServer" url="http://localhost:8080/solr"/>
+    <solr:solr-server id="solrServer" url="http://localhost:8983/solr"/>
 
     <bean id="solrTemplate" class="com.jee.solr.query.CustomSolrTemplate">
         <constructor-arg name="solrServer" ref="solrServer"/>
-        <constructor-arg name="core" value="db"/>
+        <constructor-arg name="core" value="emall"/>
     </bean>
 
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -27,5 +27,7 @@
         <property name="template" ref="solrTemplate"/>
     </bean>
 
+    <solr:repositories base-package="com.jee.solr.repositories" solr-server-ref="solrServer"
+                       factory-class="com.jee.solr.support.CustomSolrRepoBean"/>
 
 </beans>

@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class SimpleShardQuery extends SimpleQuery {
 
-    private List<String> shardNames;
+    private String shardNames;
 
 
     public SimpleShardQuery() {
@@ -51,11 +51,11 @@ public class SimpleShardQuery extends SimpleQuery {
     }
 
 
-    public List<String> getShardNames() {
+    public String getShardNames() {
         return shardNames;
     }
 
-    public void setShardNames(List<String> shardNames) {
+    public void setShardNames(String shardNames) {
         this.shardNames = shardNames;
     }
 }

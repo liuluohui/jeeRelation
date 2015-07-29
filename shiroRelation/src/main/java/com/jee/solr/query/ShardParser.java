@@ -1,6 +1,6 @@
 package com.jee.solr.query;
 
-import com.sun.jmx.mbeanserver.NamedObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.data.solr.core.DefaultQueryParser;
 import org.springframework.data.solr.core.query.AbstractQueryDecorator;
@@ -20,25 +20,36 @@ public class ShardParser extends DefaultQueryParser {
         SolrQuery solrQuery = super.constructSolrQuery(query);
         fillShard(query, solrQuery);
 
-        if (query instanceof AbstractQueryDecorator) {
-            try {
-                Field field = AbstractQueryDecorator.class.getDeclaredField("query");
-                field.setAccessible(true);
-                fillShard(field.get(query), solrQuery);
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-
         return solrQuery;
     }
 
-    private void fillShard(Object query, SolrQuery solrQuery) {
+    private void fillShard(SolrDataQuery query, SolrQuery solrQuery) {
+        if (!addShardInfo(query, solrQuery)) {
+            if (query instanceof AbstractQueryDecorator) {
+                Field field = null;
+                try {
+                    field = AbstractQueryDecorator.class.getDeclaredField("query");
+                    field.setAccessible(true);
+                    Query insQuery = (Query) field.get(query);
+                    addShardInfo(insQuery, solrQuery);
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private boolean addShardInfo(SolrDataQuery query, SolrQuery solrQuery) {
         if (query instanceof SimpleShardQuery) {
             solrQuery.setParam("shards.tolerant", true);
-            // solrQuery.setParam("_router_", ((SimpleShardQuery) query).getShardNames().toString());
+            String shardNames = ((SimpleShardQuery) query).getShardNames();
+            if (StringUtils.isNoneBlank(shardNames)) {
+                solrQuery.setParam("_router_", shardNames);
+            }
+            return true;
         }
+        return false;
     }
 }

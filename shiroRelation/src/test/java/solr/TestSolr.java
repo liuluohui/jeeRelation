@@ -4,6 +4,7 @@ import com.jee.solr.query.SimpleShardQuery;
 import com.jee.solr.repositories.ProductReposity;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.util.ClassUtils;
@@ -18,12 +19,12 @@ public class TestSolr extends AbstractJUnit4SpringContextTests {
     private ProductReposity productReposity;
 
     @Test
-    public void testQueyr(){
-        System.out.println(productReposity.queryProductByTitle("aaa"));
+    public void testQueyr() {
+        System.out.println(productReposity.queryProductByTitle("aaa", new PageRequest(0, 10)));
     }
 
     @Test
-    public void testAssginForm(){
+    public void testAssginForm() {
         System.out.println(ClassUtils.isAssignable(SimpleShardQuery.class, SimpleShardQuery.class));
     }
 
