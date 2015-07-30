@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:solr="http://www.springframework.org/schema/data/solr"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/data/solr http://www.springframework.org/schema/data/solr/spring-solr.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+    <context:component-scan base-package="com.jee.solr">
+    </context:component-scan>
+
+
+    <bean id="cloudServer" class="org.apache.solr.client.solrj.impl.CloudSolrServer">
+        <constructor-arg name="zkHost" value="localhost:2181/solr"></constructor-arg>
+        <constructor-arg name="updatesToLeaders" value="true"></constructor-arg>
+        <property name="defaultCollection" value="emall"/>
+        <property name="zkClientTimeout" value="5000"/>
+        <property name="zkConnectTimeout" value="5000"/>
+    </bean>
+
+
+    <bean id="muticoreFactory" class="org.springframework.data.solr.server.support.MulticoreSolrServerFactory">
+        <constructor-arg name="solrServer" ref="cloudServer"/>
+    </bean>
+
+    <bean id="solrTemplate" class="com.jee.solr.query.CustomSolrTemplate">
+        <constructor-arg name="solrServerFactory" ref="muticoreFactory"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetMethod" value="registerParser"/>
+        <property name="targetObject" ref="customSetting"/>
+    </bean>
+
+    <bean id="customSetting" class="com.jee.solr.CustomSetting">
+        <property name="template" ref="solrTemplate"/>
+    </bean>
+
+    <solr:repositories base-package="com.jee.solr.repositories" solr-server-ref="solrServer"
+                       factory-class="com.jee.solr.support.CustomSolrRepoBean" multicore-support="true"/>
+
+</beans>

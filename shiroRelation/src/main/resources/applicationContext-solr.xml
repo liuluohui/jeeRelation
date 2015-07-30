@@ -11,23 +11,23 @@
     <context:component-scan base-package="com.jee.solr">
     </context:component-scan>
 
-    <solr:solr-server id="solrServer" url="http://localhost:8983/solr"/>
+    <solr:solr-server id="solrServer" url="http://localhost:8983/solr" timeout="5000"/>
 
-    <bean id="solrTemplate" class="com.jee.solr.query.CustomSolrTemplate">
-        <constructor-arg name="solrServer" ref="solrServer"/>
-        <constructor-arg name="core" value="emall"/>
+    <bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+        <constructor-arg name="baseURL" value="http://localhost:8983/solr"></constructor-arg>
+        <property name="soTimeout" value="5000"/>
+        <property name="connectionTimeout" value="5000"/>
     </bean>
 
-    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetMethod" value="registerParser"/>
-        <property name="targetObject" ref="customSetting"/>
+
+    <bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate">
+        <constructor-arg name="solrServerFactory" ref="solrServerFactory"/>
     </bean>
 
-    <bean id="customSetting" class="com.jee.solr.CustomSetting">
-        <property name="template" ref="solrTemplate"/>
+    <bean id="solrServerFactory" class="org.springframework.data.solr.server.support.MulticoreSolrServerFactory">
+        <property name="solrServer" ref="httpSolrServer"/>
     </bean>
 
-    <solr:repositories base-package="com.jee.solr.repositories" solr-server-ref="solrServer"
-                       factory-class="com.jee.solr.support.CustomSolrRepoBean"/>
+    <solr:repositories base-package="com.jee.solr.repositories" solr-server-ref="solrServer" multicore-support="true"/>
 
 </beans>
