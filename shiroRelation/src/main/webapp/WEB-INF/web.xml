@@ -9,7 +9,8 @@
 		<param-value>
 			classpath*:/applicationContext.xml,
 			classpath*:/applicationContext-shiro.xml,
-			classpath*:/spring-redis.xml
+			classpath*:/spring-redis.xml,
+            classpath*:/applicationContext-jcaptcha.xml
 		</param-value>
 	</context-param>
 	<context-param>

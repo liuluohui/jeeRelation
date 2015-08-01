@@ -67,6 +67,7 @@ public class TaskController {
 		Page<Task> tasks = taskService.getUserTask(userId, searchParams, pageNumber, pageSize, sortType);
 
 		model.addAttribute("tasks", tasks);
+        model.addAttribute("content",tasks.getContent());
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		// 将搜索条件编码成字符串，用于排序，分页的URL

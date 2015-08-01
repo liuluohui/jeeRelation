@@ -21,6 +21,7 @@ public class Product implements Serializable {
     @Field
     private List<String> title;
 
+
     public Product() {
     }
 

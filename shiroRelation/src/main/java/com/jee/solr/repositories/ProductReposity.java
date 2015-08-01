@@ -18,4 +18,6 @@ public interface ProductReposity extends SolrCrudRepository<Product, String> {
     @Shard
     Page<Product> queryProductByTitle(String title, Pageable page);
 
+    void save(Product product);
+
 }

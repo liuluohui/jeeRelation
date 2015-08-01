@@ -5,7 +5,7 @@
 <html>
 <head>
 	<title>用户注册</title>
-	
+
 	<script>
 		$(document).ready(function() {
 			//聚焦第一个输入框
@@ -24,6 +24,10 @@
 				}
 			});
 		});
+
+        function refreshPic(){
+            $('#captchaPic').attr('src',"${ctx}/captcha?ts="+new Date().getTime());
+        }
 	</script>
 </head>
 
@@ -55,8 +59,16 @@
 					<input type="password" id="confirmPassword" name="confirmPassword" class="input-large required" equalTo="#plainPassword"/>
 				</div>
 			</div>
+            <div class="control-group">
+                <label for="confirmPassword" class="control-label">验证码</label>
+                <div class="controls">
+                    <input type="text" id="captcha" name="captcha" class="input-large required"/>
+                    <img src="${ctx}/captcha" style="cursor: pointer;" id="captchaPic" onclick="refreshPic()"/>
+                    看不清?<a style="cursor: pointer;" onclick="refreshPic()">换一张</a>
+                </div>
+            </div>
 			<div class="form-actions">
-				<input id="submit_btn" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
+				<input id="submit_btn" class="btn btn-primary" type="submit" value="提交"/>&nbsp;
 				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>
