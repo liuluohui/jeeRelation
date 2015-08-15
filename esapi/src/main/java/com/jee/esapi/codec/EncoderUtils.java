@@ -31,7 +31,7 @@ public class EncoderUtils {
     /**
      * SQL 编码公共函数
      */
-    public static String sqlEncode(String inputString, DBCODEC dbcodec) {
+    public static String sqlEncode(String inputString, DatabaseCodec dbcodec) {
         return encoder.encodeForSQL(dbcodec.codec(), inputString);
     }
 
@@ -44,7 +44,7 @@ public class EncoderUtils {
      * @param dbcodec
      * @return
      */
-    public static String sqlPreparedString(String sqlTemplate, String[] paras, DBCODEC dbcodec) {
+    public static String sqlPreparedString(String sqlTemplate, String[] paras, DatabaseCodec dbcodec) {
         PreparedString sqlPreparedString = new PreparedString(sqlTemplate, dbcodec.codec());
         for (int i = 0; i < paras.length; i++) {
             sqlPreparedString.set(i + 1, paras[i]);
@@ -145,7 +145,7 @@ public class EncoderUtils {
         return encoder.decodeFromBase64(text);
     }
 
-    public enum DBCODEC {
+    public enum DatabaseCodec {
         ORACLE(new OracleCodec()),
         MYSQL_ANSI(new MySQLCodec(MySQLCodec.Mode.ANSI)),
         MYSQL_STANDARD(new MySQLCodec(MySQLCodec.Mode.ANSI)),
@@ -153,7 +153,7 @@ public class EncoderUtils {
 
         private Codec codec;
 
-        private DBCODEC(Codec codec) {
+        private DatabaseCodec(Codec codec) {
             this.codec = codec;
         }
 
