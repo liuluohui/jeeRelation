@@ -23,18 +23,23 @@ public class TestSQLInjection {
         String injectionParam = "{}";
         String tableName = "emall_info_attr;drop table emall_info_attr;select * from emall_info_attr";
 
+        System.out.println("=======origin========");
         System.out.println(appendParam(injectionParam, tableName));
 
+        System.out.println("=======oracle========");
         Codec oracleCodec = new OracleCodec();
         System.out.println(appendParam(ESAPI.encoder().encodeForSQL(oracleCodec, injectionParam), tableName));
 
+        System.out.println("=======custom oracle========");
         OracleEncoder encoder = new OracleEncoder();
         System.out.println(appendParam(encoder.encode(injectionParam), tableName));
 
+        System.out.println("=======MySQLCodec STANDARD========");
         Codec standardMySQLCodec = new MySQLCodec(MySQLCodec.Mode.STANDARD);
         System.out.println(appendParam(ESAPI.encoder().encodeForSQL(standardMySQLCodec, injectionParam), ESAPI.encoder().encodeForSQL(standardMySQLCodec, tableName)));
 
 
+        System.out.println("=======MySQLCodec ANSI========");
         Codec ansiMySQLCodec = new MySQLCodec(MySQLCodec.Mode.ANSI);
         System.out.println(appendParam(ESAPI.encoder().encodeForSQL(ansiMySQLCodec, injectionParam), ESAPI.encoder().encodeForSQL(ansiMySQLCodec, tableName)));
 
