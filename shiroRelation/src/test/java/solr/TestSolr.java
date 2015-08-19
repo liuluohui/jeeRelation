@@ -5,6 +5,7 @@ import com.jee.solr.query.SimpleShardQuery;
 import com.jee.solr.repositories.ProductReposity;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.util.ClassUtils;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 /**
  * Created by Administrator on 2015/7/25.
  */
-@ContextConfiguration(locations = "/applicationContext-solr.xml")
+@ContextConfiguration(locations = "/applicationContext-solrcloud.xml")
 public class TestSolr extends AbstractJUnit4SpringContextTests {
 
     @Autowired
@@ -22,14 +23,14 @@ public class TestSolr extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void testQueyr() {
-        System.out.println(productReposity.queryProductByTitle("title*"));
+        System.out.println(productReposity.queryProductByTitle("title*",new PageRequest(0,20)));
     }
 
     @Test
     public void testSave() {
 
         for (int i = 0; i < 100; i++) {
-            productReposity.save(new Product(i + "", Arrays.asList(new String[]{"title" + i})));
+            productReposity.save(new Product(i + "", "title" + i));
         }
 
     }

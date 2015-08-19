@@ -1,5 +1,7 @@
 package com.jee.solr.support;
 
+import com.jee.solr.query.ShardParser;
+import com.jee.solr.query.SimpleShardQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.querydsl.QueryDslUtils;
@@ -10,6 +12,7 @@ import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.data.repository.query.RepositoryQuery;
 import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.query.Query;
 import org.springframework.data.solr.core.schema.SolrPersistentEntitySchemaCreator;
 import org.springframework.data.solr.repository.query.*;
 import org.springframework.data.solr.repository.support.SimpleSolrRepository;
@@ -56,6 +59,8 @@ public class CustomSolrRepositoryFactory extends RepositoryFactorySupport {
         SolrTemplate template = new SolrTemplate(solrServer);
         this.addSchemaCreationFeaturesIfEnabled(template);
         template.afterPropertiesSet();
+        template.registerQueryParser(SimpleShardQuery.class, new ShardParser());
+        template.registerQueryParser(Query.class, new ShardParser());
         return template;
     }
 
@@ -67,6 +72,8 @@ public class CustomSolrRepositoryFactory extends RepositoryFactorySupport {
         Object operations = this.solrOperations;
         if (this.factory != null) {
             SolrTemplate repository = new SolrTemplate(this.factory);
+            repository.registerQueryParser(SimpleShardQuery.class, new ShardParser());
+            repository.registerQueryParser(Query.class, new ShardParser());
             if (this.solrOperations.getConverter() != null) {
                 repository.setMappingContext(this.solrOperations.getConverter().getMappingContext());
             }

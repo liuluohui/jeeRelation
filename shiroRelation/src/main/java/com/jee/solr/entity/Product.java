@@ -16,41 +16,42 @@ public class Product implements Serializable {
 
     @Id
     @Field
-    private String id;
+    private String user_id;
 
     @Field
-    private List<String> title;
+    private String code;
 
 
     public Product() {
     }
 
-    public Product(String id, List<String> title) {
-        this.id = id;
-        this.title = title;
+    public Product(String user_id, String code) {
+        this.user_id = user_id;
+        this.code = code;
     }
 
-    public String getId() {
-        return id;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public List<String> getTitle() {
-        return title;
+    public String getCode() {
+        return code;
     }
 
-    public void setTitle(List<String> title) {
-        this.title = title;
+    public void setCode(String code) {
+        this.code = code;
     }
+
 
     @Override
     public String toString() {
         return "Product{" +
-                "id='" + id + '\'' +
-                ", title=" + title +
+                "code='" + code + '\'' +
+                ", user_id='" + user_id + '\'' +
                 '}';
     }
 }

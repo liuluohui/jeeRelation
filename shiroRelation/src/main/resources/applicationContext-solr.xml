@@ -13,7 +13,7 @@
 
     <bean id="cloudServer" class="org.apache.solr.client.solrj.impl.CloudSolrServer">
         <constructor-arg name="zkHost" value="localhost:2181/solr"/>
-        <property name="defaultCollection" value="db2"/>
+        <property name="defaultCollection" value="ec"/>
     </bean>
 
 

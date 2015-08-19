@@ -12,14 +12,12 @@ import org.springframework.stereotype.Service;
 /**
  * Created by Administrator on 2015/7/25.
  */
-@Service
-public class ProductReposityImpl implements ProductReposity<Product, String> {
+public class ProductReposityImpl{// implements ProductReposity<Product, String> {
 
 
     @Autowired
     private SolrTemplate solrTemplate;
 
-    @Override
     public Page<Product> queryProductByTitle(String title) {
         SimpleShardQuery query = new SimpleShardQuery();
         query.addCriteria(new Criteria("title").expression(title));
@@ -27,7 +25,6 @@ public class ProductReposityImpl implements ProductReposity<Product, String> {
         return solrTemplate.queryForPage(query, Product.class);
     }
 
-    @Override
     public void save(Product product) {
         solrTemplate.saveBean(product);
         solrTemplate.commit();

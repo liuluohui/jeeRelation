@@ -1,11 +1,15 @@
 package com.jee.solr.support;
 
+import com.jee.solr.query.ShardParser;
+import com.jee.solr.query.SimpleShardQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 import org.springframework.data.repository.core.support.TransactionalRepositoryFactoryBeanSupport;
 import org.springframework.data.solr.core.SolrOperations;
+import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.mapping.SimpleSolrMappingContext;
+import org.springframework.data.solr.core.query.Query;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -51,6 +55,10 @@ public class CustomSolrRepoBean<T extends Repository<S, ID>, S, ID extends Seria
     public void afterPropertiesSet() {
         super.afterPropertiesSet();
         Assert.isTrue(this.operations != null || this.solrServer != null, "SolrOperations or SolrServer must be configured!");
+        if (operations != null && operations instanceof SolrTemplate) {
+            ((SolrTemplate) operations).registerQueryParser(SimpleShardQuery.class, new ShardParser());
+            ((SolrTemplate) operations).registerQueryParser(Query.class, new ShardParser());
+        }
     }
 
 
