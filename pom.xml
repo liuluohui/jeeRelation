@@ -14,6 +14,8 @@
         <module>security-rsa</module>
         <module>esapi</module>
         <module>spring-rabbit</module>
+        <module>jeeRelation/security</module>
+        <module>security</module>
     </modules>
 
     <properties>
